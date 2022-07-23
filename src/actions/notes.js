@@ -71,14 +71,14 @@ export const startUpdateNote = (note) => {
     try {
       await updateDoc(doc(db, `${uid}/journal/notes`, note.id), noteFirebase);
 
-      dispatch(updateNotes(note.id, note));
+      dispatch(updateNote(note.id, note));
     } catch (err) {
       console.error(err);
     }
   };
 };
 
-export const updateNotes = (id, note) => ({
+export const updateNote = (id, note) => ({
   type: TYPES.noteUpdated,
   payload: { id, note },
 });
@@ -106,11 +106,11 @@ export const uploadFileActive = (file) => {
   return async (dispatch, getState) => {
     let { active } = getState().notes;
 
-    const cloudURL = "https://api.cloudinary.com/v1_1/jimenarw/image/upload";
+    const cloudURL = process.env.REACT_APP_CLOUD_URL;
 
     const formData = new FormData();
 
-    formData.append("upload_preset", "react-journal");
+    formData.append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET_NAME);
     formData.append("file", file);
     
     Swal.fire({
